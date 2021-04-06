@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>buttons/add.png</file>
+        <file>buttons/pause.png</file>
+        <file>buttons/start.png</file>
+        <file>buttons/stop.png</file>
+        <file>buttons/exit.png</file>
+        <file>buttons/roll.png</file>
+    </qresource>
+    <qresource prefix="/design"/>
+    <qresource prefix="/saves">
+        <file>file/musicsaves.bin</file>
+    </qresource>
+</RCC>
