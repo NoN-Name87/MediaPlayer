@@ -8,7 +8,5 @@
         <file>buttons/roll.png</file>
     </qresource>
     <qresource prefix="/design"/>
-    <qresource prefix="/saves">
-        <file>file/musicsaves.bin</file>
-    </qresource>
+    <qresource prefix="/saves"/>
 </RCC>
