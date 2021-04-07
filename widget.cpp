@@ -68,25 +68,30 @@ Widget::~Widget() = default;
 void Widget::load_saves() {
     QFileInfo check;
     QString path_name = qApp->applicationDirPath();
+    QString rewrite;
     qDebug() << path_name;
     path_name.append("/musicsaves.txt");
     QFile file(path_name);
     QString path;
-    file.open(QIODevice::ReadOnly);
+    file.open(QIODevice::ReadWrite);
     QTextStream in(&file);
 
     while(!in.atEnd()){
          QList<QStandardItem *> items;
-         path = in.readLine();
-         check = path;
+         check = in.readLine();
          if(!check.exists()){ continue; }//file-path checker
+         path = check.filePath();
          playlist->addMedia(QUrl(path));
          items.append(new QStandardItem(QDir(path).dirName()));
          items.append(new QStandardItem(path));
          itmodel->appendRow(items);
-
+         rewrite.append(path + "\n");
          path.clear();
     }
+
+    file.resize(0);
+    in << rewrite;
+    rewrite.clear();
     file.close();
 }
 
