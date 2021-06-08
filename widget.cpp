@@ -1,7 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "appstyle.h"
-Widget::Widget(QWidget *parent)
+AudioPlayer::AudioPlayer(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
@@ -43,12 +43,12 @@ Widget::Widget(QWidget *parent)
 
     //Media tool buttons
     connect(ui->start_btn, &QPushButton::clicked, player.get(), &QMediaPlayer::play);
-    connect(ui->start_btn, &QPushButton::clicked, this, &Widget::setPos);
+    connect(ui->start_btn, &QPushButton::clicked, this, &AudioPlayer::setPos);
     connect(ui->pause_btn, &QPushButton::clicked, player.get(), &QMediaPlayer::pause);
-    connect(ui->pause_btn, &QPushButton::clicked, this, &Widget::stopTrack);
+    connect(ui->pause_btn, &QPushButton::clicked, this, &AudioPlayer::stopTrack);
     connect(ui->stop_btn, &QPushButton::clicked, player.get(), &QMediaPlayer::stop);
-    connect(ui->add_btn, &QPushButton::clicked, this, &Widget::add_track);
-    connect(player.get(), &QMediaPlayer::durationChanged, this, &Widget::start_timer);
+    connect(ui->add_btn, &QPushButton::clicked, this, &AudioPlayer::add_track);
+    connect(player.get(), &QMediaPlayer::durationChanged, this, &AudioPlayer::start_timer);
     connect(ui->tableView, &QTableView::clicked, [this](const QModelIndex &index){
         playlist->setCurrentIndex(index.row());
     });// lyambda-function (C++11)
@@ -57,15 +57,15 @@ Widget::Widget(QWidget *parent)
     connect(ui->horizontalSlider, &QSlider::valueChanged, player.get(), &QMediaPlayer::setVolume);
     connect(ui->time_track, &QSlider::sliderMoved, player.get(), &QMediaPlayer::setPosition);
     connect(player.get(), &QMediaPlayer::positionChanged, ui->time_track, &QSlider::setSliderPosition);
-    connect(&t_track, &QTimer::timeout, this, &Widget::setPos);
+    connect(&t_track, &QTimer::timeout, this, &AudioPlayer::setPos);
     //exit and roll up buttons
     connect(ui->roll, &QToolButton::clicked, this, &QWidget::showMinimized);
     connect(ui->exit, &QToolButton::clicked, this, &QApplication::quit);
 }
 
-Widget::~Widget() = default;
+AudioPlayer::~AudioPlayer() = default;
 
-void Widget::load_saves() {
+void AudioPlayer::load_saves() {
     QFileInfo check;
     QString path_name = qApp->applicationDirPath();
     QString rewrite;
@@ -95,7 +95,7 @@ void Widget::load_saves() {
     file.close();
 }
 
-void Widget::add_track() noexcept {
+void AudioPlayer::add_track() noexcept {
     QStringList files = QFileDialog::getOpenFileNames(this, tr("Open files"),
                                                   QString(),
                                                   tr("Audio Files (*.mp3 *.wav)"));
@@ -105,7 +105,7 @@ void Widget::add_track() noexcept {
     path_name.append("/musicsaves.txt");
     QFile file(path_name);
     file.open(QIODevice::Append | QIODevice::Text);
-    QDataStream out(&file);
+    QTextStream out(&file);
     foreach(QString path, files) {
         QList<QStandardItem *> items;
         items.append(new QStandardItem(QDir(path).dirName()));
@@ -118,18 +118,18 @@ void Widget::add_track() noexcept {
     file.close();
 }
 
-void Widget::start_timer() noexcept {
+void AudioPlayer::start_timer() noexcept {
     float duration = player->duration() / 1000.0f;
     ui->time_track->setRange(0, player->duration());
     ui->time_track->setValue(0);
     ui->end_time->setText(QDateTime::fromTime_t(duration).toString("mm:ss"));
 }
 
-void Widget::setPos() noexcept {
+void AudioPlayer::setPos() noexcept {
     t_track.start(0);
     ui->begin_time->setText(QDateTime::fromTime_t(player->position() / 1000.0f).toString("mm:ss"));
 }
 
-void Widget::stopTrack() noexcept {
+void AudioPlayer::stopTrack() noexcept {
     t_track.stop();
 }

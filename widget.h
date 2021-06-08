@@ -17,12 +17,12 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
 
-class Widget : public QWidget
+class AudioPlayer : public QWidget
 {
     Q_OBJECT
 public:
-    Widget(QWidget *parent = nullptr);
-    ~Widget();
+    AudioPlayer(QWidget *parent = nullptr);
+    ~AudioPlayer();
     void load_saves();
 private slots:
     void add_track() noexcept;

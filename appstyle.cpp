@@ -8,9 +8,9 @@ QString AppStyle::getWindowStyle() {
 }
 
 QString AppStyle::getTableStyle() {
-    return "QTableView { "
-           "background-color: white; "
-           "color: black; "
+        return "QTableView { "
+           "background-color: #292929; "
+           "color: white; "
            "border: 1px solid #e2e2de;"
            "}"
            "QTableView::item:selected {"
@@ -27,6 +27,7 @@ QString AppStyle::getTableStyle() {
            "padding: 6px; "
            "}";
 }
+
 
 QString AppStyle::getCloseBtnStyle() {
     return "QToolButton:hover {"
